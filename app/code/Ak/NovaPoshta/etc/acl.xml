@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Adminhtml::admin">
+                <resource id="Magento_Sales::sales">
+                    <resource id="Ak_Novaposhta::novaposhta" title="Nova Poshta" sortOrder="100">
+                        <resource id="Ak_Novaposhta::novaposhta_warehouses" title="Warehouses" sortOrder="10">
+                            <resource id="Ak_Novaposhta::novaposhta_warehouses_synchronize" title="Synchronize with API" sortOrder="10" />
+                        </resource>
+                    </resource>
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>

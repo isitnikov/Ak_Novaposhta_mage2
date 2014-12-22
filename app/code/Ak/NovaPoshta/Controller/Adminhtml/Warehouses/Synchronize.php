@@ -16,6 +16,16 @@ class Synchronize extends Warehouses
         $this->_import = $import;
     }
 
+    /**
+     * Check is allowed access
+     *
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Ak_NovaPoshta::novaposhta_warehouses_synchronize');
+    }
+
     public function execute()
     {
         try {
