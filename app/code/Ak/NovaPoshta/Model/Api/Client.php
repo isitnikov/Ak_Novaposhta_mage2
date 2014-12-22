@@ -169,7 +169,7 @@ class Client extends \Magento\Framework\Object
     ) {
         $response = $this->_makeRequest(array(
             'countPrice' => array(
-                'date'            => $deliveryDate->toString(\Magento\Framework\Stdlib\DateTime\Date::DATE_MEDIUM),
+                'date'            => $deliveryDate->toString('d.M.Y'),
                 'senderCity'      => $senderCity->getData('name_ru'),
                 'recipientCity'   => $recipientCity->getData('name_ru'),
                 'mass'            => $packageWeight,
