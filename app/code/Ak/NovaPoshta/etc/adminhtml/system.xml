@@ -29,7 +29,7 @@
                 </field>
                 <field id="sender_city" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Sender's City</label>
-                    <source_model>Ak\NovaPoshta\Model\System\Config\City</source_model>
+                    <source_model>Ak\NovaPoshta\Model\System\Config\Source\City</source_model>
                 </field>
                 <field id="shipping_offset" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Shipping Date Offset (Days)</label>

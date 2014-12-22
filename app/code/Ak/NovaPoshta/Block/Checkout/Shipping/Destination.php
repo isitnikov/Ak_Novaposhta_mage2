@@ -49,7 +49,7 @@ class Destination extends \Magento\Framework\View\Element\Template
         $warehouseId = $quote->getShippingAddress()->getData('warehouse_id');
         if ($warehouseId) {
             /** @var \Ak\Novaposhta\Model\Warehouse $warehouse */
-            $warehouse = $this->_warehouse->create()->load($warehouseId);
+            $warehouse = $this->_warehouseFactory->create()->load($warehouseId);
             if ($warehouse->getId()) {
                 return $warehouse;
             }

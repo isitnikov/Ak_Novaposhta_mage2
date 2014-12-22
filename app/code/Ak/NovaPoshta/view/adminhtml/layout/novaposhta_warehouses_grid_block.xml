@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="ak.novaposhta.admin.block.warehouses.grid.container">
+            <block class="Magento\Backend\Block\Widget\Grid" name="ak.novaposhta.admin.block.warehouses.grid" as="grid">
+                <arguments>
+                    <argument name="id" xsi:type="string">warehousesGrid</argument>
+                    <argument name="dataSource" xsi:type="object">Ak\NovaPoshta\Model\Resource\Warehouse\Collection</argument>
+                    <argument name="default_sort" xsi:type="string">city_id</argument>
+                    <argument name="default_dir" xsi:type="string">asc</argument>
+                    <argument name="save_parameters_in_session" xsi:type="boolean">true</argument>
+                    <argument name="use_ajax" xsi:type="boolean">true</argument>
+                    <argument name="grid_url" xsi:type="url" path="novaposhta/*/grid">
+                        <param name="_current">1</param>
+                    </argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="ak.novaposhta.admin.block.warehouses.grid.columnSet" as="grid.columnSet">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">ID</argument>
+                            <argument name="type" xsi:type="string">number</argument>
+                            <argument name="id" xsi:type="string">id</argument>
+                            <argument name="index" xsi:type="string">id</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="address_ru">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Address</argument>
+                            <argument name="index" xsi:type="string">address_ru</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="city_id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">City</argument>
+                            <argument name="index" xsi:type="string">city_id</argument>
+                            <argument name="type" xsi:type="string">options</argument>
+                            <argument name="options" xsi:type="options" model="Ak\NovaPoshta\Model\System\Config\City"/>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="phone">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Phone</argument>
+                            <argument name="index" xsi:type="string">phone</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="max_weight_allowed">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Max Weight</argument>
+                            <argument name="index" xsi:type="string">max_weight_allowed</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

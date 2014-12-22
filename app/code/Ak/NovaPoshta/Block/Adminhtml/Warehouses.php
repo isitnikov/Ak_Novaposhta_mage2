@@ -1,52 +1,25 @@
 <?php
 namespace Ak\Novaposhta\Block\Adminhtml;
 
-class Warehouses extends \Magento\Backend\Block\Template
+class Warehouses extends \Magento\Backend\Block\Widget\Grid\Container
 {
-    protected $_template = 'warehouses.phtml';
-
     /**
-     * @return $this
+     * Constructor
+     *
+     * @return void
      */
-    protected function _prepareLayout()
+    protected function _construct()
     {
-        $this->getToolbar()->addChild(
-            'synchronize',
-            'Magento\Backend\Block\Widget\Button',
-            [
-                'label' => __('Synchronize with API'),
-                'onclick' => "window.location='" . $this->getSynchronizeUrl() . "'",
-                'class' => 'add primary add-template'
-            ]
-        );
+        $this->_controller     = 'adminhtml';
+        $this->_blockGroup     = 'Ak_Novaposhta';
+        $this->_headerText     = __('Warehouses');
+        $this->_addButtonLabel = __('Synchronize with API');
 
-        $this->setChild(
-            'grid',
-            $this->getLayout()->createBlock(
-                'Ak\NovaPoshta\Block\Adminhtml\Warehouses\Grid',
-                'novaposhta.warehouses.grid'
-            )
-        );
-        return parent::_prepareLayout();
+        parent::_construct();
     }
 
-    /**
-     * Get the url for create
-     *
-     * @return string
-     */
-    public function getSynchronizeUrl()
+    public function getCreateUrl()
     {
         return $this->getUrl('*/*/synchronize');
-    }
-
-    /**
-     * Get header text
-     *
-     * @return string
-     */
-    public function getHeaderText()
-    {
-        return __('Manage warehouses');
     }
 }

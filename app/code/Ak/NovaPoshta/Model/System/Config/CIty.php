@@ -13,13 +13,12 @@ class City implements \Magento\Framework\Option\ArrayInterface
 
     public function toOptionArray()
     {
-        $options = $this->_cityCollection->toOptionArray();
+        $array = [];
 
-        array_unshift($options, array(
-            'value' => '',
-            'label' => __('-- Please Select --')
-        ));
+        foreach ($this->_cityCollection->toOptionArray() as $v) {
+            $array[$v['value']] = $v['label'];
+        }
 
-        return $options;
+        return $array;
     }
 }

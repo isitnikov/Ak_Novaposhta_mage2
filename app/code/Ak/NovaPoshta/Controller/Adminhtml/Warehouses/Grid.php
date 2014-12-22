@@ -7,8 +7,7 @@ class Grid extends Warehouses
 {
     public function execute()
     {
-        $this->_view->loadLayout();
-        $grid = $this->_view->getLayout()->createBlock('Ak\NovaPoshta\Block\Adminhtml\Warehouses\Grid')->toHtml();
-        $this->getResponse()->setBody($grid);
+        $this->_view->loadLayout(false);
+        $this->_view->renderLayout();
     }
 }

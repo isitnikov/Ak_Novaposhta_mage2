@@ -28,17 +28,4 @@ class Collection extends AbstractCollection
     {
         return $this->setOrder('name_ru', Db::SORT_ORDER_ASC)->_toOptionArray('id', 'name_ru');
     }
-
-    /**
-     * @return array
-     */
-    public function getOptionArray()
-    {
-        $array = [];
-        foreach ($this->toOptionArray() as $v) {
-            $array[$v['value']] = $v['label'];
-        }
-
-        return $array;
-    }
 }
