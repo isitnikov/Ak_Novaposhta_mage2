@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
+    <event name="sales_quote_address_collection_load_after">
+        <observer name="novaposhta" instance="Ak\NovaPoshta\Model\Observer" method="loadQuoteAddressCollectionData" shared="false" />
+    </event>
+    <event name="sales_quote_address_save_after">
+        <observer name="novaposhta" instance="Ak\NovaPoshta\Model\Observer" method="saveQuoteAddressData" shared="false" />
+    </event>
+    <event name="sales_quote_address_load_after">
+        <observer name="novaposhta" instance="Ak\NovaPoshta\Model\Observer" method="loadQuoteAddressData" shared="false" />
+    </event>
+    <event name="sales_order_address_collection_load_after">
+        <observer name="novaposhta" instance="Ak\NovaPoshta\Model\Observer" method="loadOrderAddressCollectionData" shared="false" />
+    </event>
+    <event name="sales_order_address_save_after">
+        <observer name="novaposhta" instance="Ak\NovaPoshta\Model\Observer" method="saveOrderAddressData" shared="false" />
+    </event>
+    <event name="sales_order_address_load_after">
+        <observer name="novaposhta" instance="Ak\NovaPoshta\Model\Observer" method="loadOrderAddressData" shared="false" />
+    </event>
+    <event name="controller_action_predispatch_checkout_onepage_saveShippingMethod">
+        <observer name="novaposhta" instance="Ak\NovaPoshta\Model\Observer" method="saveShippingMethodBefore" shared="false" />
+    </event>
+</config>

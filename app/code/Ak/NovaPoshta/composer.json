@@ -1,0 +1,22 @@
+{
+    "name": "ak/module-novaposhta",
+    "description": "N/A",
+    "require": {
+        "php": "~5.4.11|~5.5.0",
+        "magento/module-shipping": "0.42.0-beta1"
+    },
+    "type": "magento2-module",
+    "version": "0.42.0-beta1",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "extra": {
+        "map": [
+            [
+                "*",
+                "Ak/NovaPoshta"
+            ]
+        ]
+    }
+}

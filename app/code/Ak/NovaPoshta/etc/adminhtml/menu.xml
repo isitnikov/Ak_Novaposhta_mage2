@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Backend/etc/menu.xsd">
+    <menu>
+        <add
+            id="Ak_NovaPoshta::novaposhta_warehouses"
+            title="Warehouses"
+            module="Ak_NovaPoshta"
+            parent="Magento_Sales::sales"
+            sortOrder="100"
+            action="novaposhta/warehouses/"
+            dependsOnModule="Magento_Sales"
+            resource="Ak_NovaPoshta::warehouses"
+        />
+    </menu>
+</config>

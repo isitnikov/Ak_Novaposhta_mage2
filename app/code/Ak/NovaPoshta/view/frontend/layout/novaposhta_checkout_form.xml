@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/layout_generic.xsd">
+    <container name="root">
+        <block class="Ak\NovaPoshta\Block\Checkout\Shipping\Destination" name="novaposhta.checkout.shipping.destination" template="Ak_NovaPoshta::checkout/shipping/destination.phtml" />
+    </container>
+</layout>

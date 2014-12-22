@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Magento/Core/etc/config.xsd">
+    <default>
+        <carriers>
+            <novaposhta>
+                <active>0</active>
+                <sallowspecific>1</sallowspecific>
+                <specificcountry>UA</specificcountry>
+                <model>Ak\NovaPoshta\Model\Carrier\NovaPoshta</model>
+                <title>Новая Почта</title>
+                <specificerrmsg>Этот способ доставки на текущий момент не доступен. Если вы желаете, чтобы мы доставили заказ Новой Почтой, обратитесь к менеджеру интернет-магазина.</specificerrmsg>
+                <api_url>http://orders.novaposhta.ua/xml.php</api_url>
+                <api_key backend_model="Magento\Backend\Model\Config\Backend\Encrypted" />
+                <enable_log>0</enable_log>
+                <shipping_offset>1</shipping_offset>
+                <max_package_weight>1000</max_package_weight>
+            </novaposhta>
+        </carriers>
+    </default>
+</config>
