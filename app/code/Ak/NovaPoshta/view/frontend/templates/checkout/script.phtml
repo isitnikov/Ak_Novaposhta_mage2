@@ -3,7 +3,7 @@
 ?>
 <script type="text/javascript">
     new (Class.create({
-        loadingImageUrl: '<?php echo $this->getViewFileUrl('opc-ajax-loader.gif');?>',
+        loadingImageUrl: '<?php echo $this->getViewFileUrl('Ak_NovaPoshta::opc-ajax-loader.gif');?>',
         initialize: function() {
             this.bind('click', /^s_method.+$/i, this.onShippingChange);
             this.bind('change', /^novaposhta-form-city-field$/i, this.onChangeCity);

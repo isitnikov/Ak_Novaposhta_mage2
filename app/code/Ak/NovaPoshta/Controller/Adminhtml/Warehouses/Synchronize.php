@@ -33,7 +33,7 @@ class Synchronize extends Warehouses
             $this->messageManager->addSuccess(__('City and Warehouse API synchronization finished'));
         }
         catch (\Magento\Framework\Model\Exception $e) {
-            $this->messageManager->addError(__('Error during synchronization: %s', $e->getMessage()));
+            $this->messageManager->addError(__('Error during synchronization: %s'), $e->getMessage());
         }
 
         $this->_redirect('*/*/index');

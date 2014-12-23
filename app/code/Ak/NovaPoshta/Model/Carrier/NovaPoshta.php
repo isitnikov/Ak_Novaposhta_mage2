@@ -115,7 +115,7 @@ class NovaPoshta
         $method->setCarrier($this->_code)
             ->setCarrierTitle($this->getConfigData('name'))
             ->setMethod('type_' . $deliveryType)
-            ->setMethodTitle(__('Доставка до склада НовойПочты'))
+            ->setMethodTitle(__('Delivery to Nova Poshta warehouse'))
             ->setPrice($shippingPrice)
             ->setCost($shippingPrice);
 
