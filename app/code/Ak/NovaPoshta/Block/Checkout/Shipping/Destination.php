@@ -44,7 +44,7 @@ class Destination extends \Magento\Framework\View\Element\Template
      */
     public function getWarehouse()
     {
-        /** @var \Magento\Sales\Model\Quote $quote */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->_checkoutSession->getQuote();
         $warehouseId = $quote->getShippingAddress()->getData('warehouse_id');
         if ($warehouseId) {

@@ -2,18 +2,24 @@
 namespace Ak\NovaPoshta\Controller\Adminhtml\Warehouses;
 
 use Ak\NovaPoshta\Controller\Adminhtml\Warehouses;
+use Magento\Backend\Model\View\Result\RedirectFactory as ResultRedirectFactory;
 
 class Synchronize extends Warehouses
 {
     /** @var \Ak\NovaPoshta\Model\Import */
-    protected $_import;
+    protected $import;
+
+    /** @var ResultRedirectFactory */
+    protected $resultRedirectFactory;
 
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
-        \Ak\NovaPoshta\Model\Import $import
+        \Ak\NovaPoshta\Model\Import $import,
+        ResultRedirectFactory $resultRedirectFactory
     ) {
         parent::__construct($context);
-        $this->_import = $import;
+        $this->import = $import;
+        $this->resultRedirectFactory = $resultRedirectFactory;
     }
 
     /**
@@ -26,18 +32,24 @@ class Synchronize extends Warehouses
         return $this->_authorization->isAllowed('Ak_NovaPoshta::novaposhta_warehouses_synchronize');
     }
 
+    /**
+     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws \Exception
+     * @throws \Magento\Framework\Exception
+     */
     public function execute()
     {
         try {
-            $this->_import->run();
+            $this->import->run();
             $this->messageManager->addSuccess(__('City and Warehouse API synchronization finished'));
-        }
-        catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception $e) {
             $this->messageManager->addError(__('Error during synchronization: %s'), $e->getMessage());
         }
 
-        $this->_redirect('*/*/index');
+        /** @var \Magento\Backend\Model\View\Result\Redirect $result */
+        $result = $this->resultRedirectFactory->create();
+        $result->setPath('*/*/index');
 
-        return $this;
+        return $result;
     }
 }

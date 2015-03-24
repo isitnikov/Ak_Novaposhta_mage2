@@ -6,7 +6,7 @@
                 <label>Новая почта</label>
                 <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enabled for Checkout</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Title</label>
@@ -40,7 +40,7 @@
                 </field>
                 <field id="api_key" translate="label" type="obscure" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Api Key</label>
-                    <backend_model>Magento\Backend\Model\Config\Backend\Encrypted</backend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
                 <field id="default_length" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Default Package Length (mm)</label>
@@ -60,11 +60,11 @@
                 </field>
                 <field id="include_postpay" translate="label" type="select" sortOrder="150" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Include Postpay to Shipping</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="enable_log" translate="label" type="select" sortOrder="160" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Enable Log</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
         </section>

@@ -5,14 +5,12 @@ use Magento\Framework\Stdlib\DateTime;
 
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    protected $_logFile = 'novaposhta.log';
-
     /**
      * Log adapter factory
      *
-     * @var \Magento\Framework\Logger\AdapterFactory
+     * @var \Ak\NovaPoshta\Model\Log\LoggerInterface
      */
-    protected $_logFactory;
+    protected $_logger;
 
     /** @var \Ak\NovaPoshta\Model\Resource\City */
     protected $_senderCity;
@@ -29,6 +27,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /** @var \Ak\NovaPoshta\Model\Api\Client */
     protected $_apiClient;
 
+    /** @var DateTime\DateTimeFactory */
+    protected $dateTime;
+
     /**
      * Object Manager
      *
@@ -40,17 +41,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Ak\NovaPoshta\Model\WarehouseFactory $warehouseFactory,
         \Ak\NovaPoshta\Model\CityFactory $cityFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Framework\Logger\AdapterFactory $logFactory,
+        \Ak\NovaPoshta\Model\Log\LoggerInterface $logger,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\ObjectManagerInterface $objectManager
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        DateTime\DateTimeFactory $dateTime
     ) {
         $this->_scopeConfig      = $scopeConfig;
         $this->_warehouseFactory = $warehouseFactory;
         $this->_cityFactory      = $cityFactory;
-        $this->_logFactory       = $logFactory;
+        $this->_logger           = $logger;
         $this->_checkoutSession  = $checkoutSession;
         $this->_objectManager    = $objectManager;
+        $this->dateTime          = $dateTime;
 
         parent::__construct($context);
     }
@@ -60,11 +63,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getApi()
     {
-        if ($this->_apiClient === null)
-        {
+        if ($this->_apiClient === null) {
             $this->_apiClient = $this->_objectManager->create('Ak\NovaPoshta\Model\Api\Client');
         }
-
         return $this->_apiClient;
     }
 
@@ -76,11 +77,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function log($string)
     {
         if ($this->getStoreConfig('enable_log')) {
-            $this->_logFactory->create(
-                ['fileName' => $this->_logFile]
-            )->log(
-                $string
-            );
+            $this->_logger->info($string);
         }
         return $this;
     }
@@ -103,7 +100,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @return \Ak\NovaPoshta\Model\City
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception
      */
     public function getSenderCity()
     {
@@ -111,7 +108,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $id = $this->getStoreConfig('sender_city');
             $this->_senderCity = $this->_cityFactory->create()->load($this->getStoreConfig('sender_city'));
             if (!$this->_senderCity->getId()) {
-                throw new \Magento\Framework\Model\Exception(__('Store city not defined.'));
+                throw new \Magento\Framework\Exception(__('Store city not defined.'));
             }
         }
 
@@ -119,17 +116,17 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * @return \Magento\Framework\Stdlib\DateTime\Date
+     * @return string
      */
     public function getDeliveryDate()
     {
-        $date = new \Magento\Framework\Stdlib\DateTime\Date(
-            null,
-            DateTime::DATETIME_INTERNAL_FORMAT
-        );
-        $date->addDay(intval($this->getStoreConfig('shipping_offset')));
+        /** @var \Magento\Framework\Stdlib\DateTime\DateTime $date */
+        $date = $this->dateTime->create();
 
-        return $date;
+        return $date->date(
+            \Ak\NovaPoshta\Model\Api\Client::DATE_FORMAT,
+            sprintf('%s +%d day', $date->gmtDate(), $this->getStoreConfig('shipping_offset'))
+        );
     }
 
     /**
@@ -170,7 +167,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getShippingCost($destinationWarehouseId)
     {
-        /** @var \Magento\Sales\Model\Quote $quote */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $quote                = $this->_checkoutSession->getQuote();
 
         /** @var \Ak\NovaPoshta\Model\Warehouse $destinationWarehouse */
@@ -182,10 +179,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         /** @var \Ak\NovaPoshta\Model\City $senderCity */
         $destinationCity      = $destinationWarehouse->getCity();
 
-        /** @var \Magento\Framework\Stdlib\DateTime\Date $deliveryDate */
+        /** @var string $deliveryDate */
         $deliveryDate         = $this->getDeliveryDate();
 
-        $result = $this->getApi()->getShippingCost($deliveryDate, $senderCity, $destinationCity,
+        $result = $this->_apiClient->getShippingCost($deliveryDate, $senderCity, $destinationCity,
             $this->getDefaultPackageWeight(),
             $this->getDefaultPackageLength(),
             $this->getDefaultPackageWidth(),

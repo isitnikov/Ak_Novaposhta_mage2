@@ -20,6 +20,8 @@ class Client extends \Magento\Framework\Object
     const LOAD_TYPE_STANDARD   = 1;
     const LOAD_TYPE_SECURITIES = 4;
 
+    const DATE_FORMAT = 'd.M.Y';
+
     public function __construct(
         \Ak\NovaPoshta\Helper\Data $helper,
         \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
@@ -107,7 +109,7 @@ class Client extends \Magento\Framework\Object
         $helper->log(print_r((array) new \SimpleXMLElement($response->getBody()), true));
 
         if (200 != $response->getStatus()) {
-            throw new \Magento\Framework\Model\Exception(__('Server error, response status:') . $response->getStatus());
+            throw new \Magento\Framework\Exception(__('Server error, response status:') . $response->getStatus());
         }
 
         return new \SimpleXMLElement($response->getBody());
@@ -138,7 +140,7 @@ class Client extends \Magento\Framework\Object
     }
 
     /**
-     * @param \Magento\Framework\Stdlib\DateTime\Date $deliveryDate
+     * @param string $deliveryDate
      * @param \Ak\NovaPoshta\Model\City $senderCity
      * @param \Ak\NovaPoshta\Model\City $recipientCity
      * @param int|float $packageWeight
@@ -152,10 +154,10 @@ class Client extends \Magento\Framework\Object
      *
      * @return array
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception
      */
     public function getShippingCost(
-        \Magento\Framework\Stdlib\DateTime\Date $deliveryDate,
+        $deliveryDate,
         \Ak\NovaPoshta\Model\City $senderCity,
         \Ak\NovaPoshta\Model\City $recipientCity,
         $packageWeight,
@@ -169,7 +171,7 @@ class Client extends \Magento\Framework\Object
     ) {
         $response = $this->_makeRequest(array(
             'countPrice' => array(
-                'date'            => $deliveryDate->toString('d.M.Y'),
+                'date'            => $deliveryDate,
                 'senderCity'      => $senderCity->getData('name_ru'),
                 'recipientCity'   => $recipientCity->getData('name_ru'),
                 'mass'            => $packageWeight,
@@ -184,7 +186,7 @@ class Client extends \Magento\Framework\Object
         ));
 
         if (1 == (int) $response->error) {
-            throw new \Magento\Framework\Model\Exception(__('Novaposhta Api error'));
+            throw new \Magento\Framework\Exception(__('Novaposhta Api error'));
         }
 
         return array (

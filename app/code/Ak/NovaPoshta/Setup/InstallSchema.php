@@ -1,11 +1,21 @@
 <?php
-/* @var $installer \Magento\Framework\Module\Setup */
-$installer = $this;
 
-$installer->startSetup();
+namespace Ak\NovaPoshta\Setup;
 
-$installer->run("
-CREATE TABLE {$this->getTable('novaposhta_city')} (
+use Magento\Framework\Setup\InstallSchemaInterface;
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\SchemaSetupInterface;
+
+class InstallSchema implements InstallSchemaInterface
+{
+    public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
+    {
+        $installer = $setup;
+
+        $installer->startSetup();
+
+        $installer->run("
+CREATE TABLE {$installer->getTable('novaposhta_city')} (
   `id` int(10) unsigned NOT NULL,
   `name_ru` varchar(100),
   `name_ua` varchar(100),
@@ -15,7 +25,7 @@ CREATE TABLE {$this->getTable('novaposhta_city')} (
   INDEX `name_ua` (`name_ua`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE {$this->getTable('novaposhta_warehouse')} (
+CREATE TABLE {$installer->getTable('novaposhta_warehouse')} (
   `id` int(10) unsigned NOT NULL,
   `city_id` int(10) unsigned NOT NULL,
   `address_ru` varchar(200),
@@ -33,11 +43,11 @@ CREATE TABLE {$this->getTable('novaposhta_warehouse')} (
   `number_in_city` int(3) unsigned NOT NULL,
   `updated_at` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  CONSTRAINT FOREIGN KEY (`city_id`) REFERENCES `{$this->getTable('novaposhta_city')}` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT FOREIGN KEY (`city_id`) REFERENCES `{$installer->getTable('novaposhta_city')}` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ");
 
-$installer->run("CREATE TABLE `{$this->getTable('novaposhta_quote_address')}` (
+        $installer->run("CREATE TABLE `{$installer->getTable('novaposhta_quote_address')}` (
   `address_id` int(10) unsigned NOT NULL,
   `warehouse_id` int(10) unsigned DEFAULT NULL,
   `warehouse_label` varchar(255) DEFAULT NULL,
@@ -45,7 +55,7 @@ $installer->run("CREATE TABLE `{$this->getTable('novaposhta_quote_address')}` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ");
 
-$installer->run("CREATE TABLE `{$this->getTable('novaposhta_order_address')}` (
+        $installer->run("CREATE TABLE `{$installer->getTable('novaposhta_order_address')}` (
   `address_id` int(10) unsigned NOT NULL,
   `warehouse_id` int(10) unsigned DEFAULT NULL,
   `warehouse_label` varchar(255) DEFAULT NULL,
@@ -53,4 +63,6 @@ $installer->run("CREATE TABLE `{$this->getTable('novaposhta_order_address')}` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ");
 
-$installer->endSetup();
+        $installer->endSetup();
+    }
+}

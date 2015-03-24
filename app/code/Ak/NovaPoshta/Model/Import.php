@@ -38,45 +38,39 @@ class Import extends Observer\AbstractObserver
     /** @var \Ak\NovaPoshta\Helper\Data */
     protected $_helper;
 
-    /** @var \Ak\NovaPoshta\Model\Api\Client */
-    protected $_apiClient;
-
     /** @var \Ak\NovaPoshta\Model\Resource\City\Collection */
     protected $_cityCollection;
 
     /** @var \Ak\NovaPoshta\Model\Resource\Warehouse\Collection */
     protected $_warehouseCollection;
 
-    /** @var \Magento\Framework\Logger */
+    /** @var \Psr\Log\LoggerInterface */
     protected $_logger;
 
     public function __construct(
         \Ak\NovaPoshta\Model\Resource\Warehouse\Collection $warehouseCollection,
         \Ak\NovaPoshta\Model\Resource\City\Collection $cityCollection,
-        \Ak\NovaPoshta\Model\Api\Client $apiClient,
         \Ak\NovaPoshta\Helper\Data $helper,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\App\Resource $resource
     ) {
         parent::__construct($resource);
 
         $this->_warehouseCollection = $warehouseCollection;
         $this->_cityCollection      = $cityCollection;
-        $this->_apiClient           = $apiClient;
         $this->_helper              = $helper;
         $this->_logger              = $logger;
     }
 
     /**
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception
      *
      * @return \Ak\NovaPoshta\Model\Import
      */
     public function run()
     {
         try {
-            /** @var $apiClient \Ak\NovaPoshta\Model\Api\Client */
-            $apiClient = $this->_apiClient;
+            $apiClient = $this->_helper->getApi();
 
             $this->_helper->log('Start city import');
             $cities = $apiClient->getCityWarehouses();
@@ -87,8 +81,8 @@ class Import extends Observer\AbstractObserver
             $warehouses = $apiClient->getWarehouses();
             $this->_importWarehouses($warehouses);
             $this->_helper->log('End warehouse import');
-        } catch (\Magento\Framework\Model\Exception $e) {
-            $this->_logger->logException($e);
+        } catch (\Magento\Framework\Exception $e) {
+            $this->_logger->error($e);
             $this->_helper->log("Exception: \n" . $e->getMessage());
             throw $e;
         }
@@ -101,13 +95,13 @@ class Import extends Observer\AbstractObserver
      *
      * @return bool
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception
      */
     protected function _importCities(array $cities)
     {
         if (empty($cities)) {
             $this->_helper->log('No city with warehouses received');
-            throw new \Magento\Framework\Model\Exception('No city with warehouses received');
+            throw new \Magento\Framework\Exception('No city with warehouses received');
         }
 
         $connection = $this->_getConnection();
@@ -132,7 +126,7 @@ class Import extends Observer\AbstractObserver
                     $connection->insertOnDuplicate($tableName, $data);
                 }
                 $connection->commit();
-            } catch (\Magento\Framework\Model\Exception $e) {
+            } catch (\Magento\Framework\Exception $e) {
                 $connection->rollBack();
                 throw $e;
             }
@@ -186,13 +180,13 @@ class Import extends Observer\AbstractObserver
      *
      * @return bool
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception
      */
     protected function _importWarehouses(array $warehouses)
     {
         if (empty($warehouses)) {
             $this->_helper->log(__('No warehouses received'));
-            throw new \Magento\Framework\Model\Exception(__('No warehouses received'));
+            throw new \Magento\Framework\Exception(__('No warehouses received'));
         }
 
         $warehouses = $this->_applyMap($warehouses, $this->_dataMapWarehouse);
@@ -213,7 +207,7 @@ class Import extends Observer\AbstractObserver
                 $connection->insertOnDuplicate($tableName, $data);
             }
             $connection->commit();
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception $e) {
             $connection->rollBack();
             throw $e;
         }

@@ -25,7 +25,7 @@ class Observer extends \Ak\NovaPoshta\Model\Observer\AbstractObserver
      */
     public function loadQuoteAddressCollectionData(\Magento\Framework\Event\Observer $observer)
     {
-        /** @var \Magento\Sales\Model\Resource\Quote\Address\Collection $addressCollection */
+        /** @var \Magento\Quote\Model\Resource\Quote\Address\Collection $addressCollection */
         $addressCollection = $observer->getData('quote_address_collection');
 
         $resource = $this->_getResource();
@@ -49,7 +49,7 @@ class Observer extends \Ak\NovaPoshta\Model\Observer\AbstractObserver
      */
     public function loadQuoteAddressData(\Magento\Framework\Event\Observer $observer)
     {
-        /** @var \Magento\Sales\Model\Quote\Address $address */
+        /** @var \Magento\Quote\Model\Quote\Address $address */
         $address = $observer->getData('quote_address');
 
         $resource = $this->_getResource();
@@ -72,7 +72,7 @@ class Observer extends \Ak\NovaPoshta\Model\Observer\AbstractObserver
      */
     public function saveQuoteAddressData(\Magento\Framework\Event\Observer $observer)
     {
-        /** @var \Magento\Sales\Model\Quote\Address $address */
+        /** @var \Magento\Quote\Model\Quote\Address $address */
         $address = $observer->getData('quote_address');
 
         $resource = $this->_getResource();
@@ -210,7 +210,7 @@ class Observer extends \Ak\NovaPoshta\Model\Observer\AbstractObserver
 
     /**
      * @param \Magento\Framework\Event\Observer $observer
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception
      */
     public function saveShippingMethodBefore(\Magento\Framework\Event\Observer $observer)
     {
@@ -222,9 +222,9 @@ class Observer extends \Ak\NovaPoshta\Model\Observer\AbstractObserver
             $warehouse = $this->_warehouseFactory->create()
                 ->load($controller->getRequest()->getParam('novaposhta_warehouse'));
             if (!$warehouse->getId()) {
-                throw new \Magento\Framework\Model\Exception(__('Invalid Warehouse.'));
+                throw new \Magento\Framework\Exception(__('Invalid Warehouse.'));
             }
-            /** @var \Magento\Sales\Model\Quote $quote */
+            /** @var \Magento\Quote\Model\Quote $quote */
             $quote = $this->_checkoutSession->getQuote();
             $quote->getShippingAddress()->setData('warehouse_id', $warehouse->getId());
         }

@@ -1,43 +1,52 @@
 <?php
 namespace Ak\NovaPoshta\Controller\Checkout;
 
+use Magento\Framework\Controller\Result\JsonFactory as ResultJsonFactory;
+
 class Calculate extends \Ak\NovaPoshta\Controller\Checkout
 {
     /** @var \Ak\NovaPoshta\Helper\Data */
-    protected $_helper;
-
-    /**
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreHelper;
+    protected $helper;
 
     /** @var \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency */
-    protected $_priceCurrency;
+    protected $priceCurrency;
 
+    /** @var ResultJsonFactory */
+    protected $resultJsonFactory;
+
+    /**
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Ak\NovaPoshta\Helper\Data $helper
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @param ResultJsonFactory $resultJsonFactory
+     */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Ak\NovaPoshta\Helper\Data $helper,
-        \Magento\Core\Helper\Data $coreHelper,
-        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
+        ResultJsonFactory $resultJsonFactory
     ) {
         parent::__construct($context);
-
-        $this->_helper        = $helper;
-        $this->_coreHelper    = $coreHelper;
-        $this->_priceCurrency = $priceCurrency;
+        $this->helper            = $helper;
+        $this->priceCurrency     = $priceCurrency;
+        $this->resultJsonFactory = $resultJsonFactory;
     }
 
     /**
      * Calculate shipping cost for destination
+     *
+     * @return array|\Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {
         $warehouseId    = (int) $this->getRequest()->getParam('warehouse');
-        $result         = $this->_helper->getShippingCost($warehouseId);
-        $result['cost'] = $this->_priceCurrency->convertAndFormat((float) $result['cost'], false);
+        $result         = $this->helper->getShippingCost($warehouseId);
+        $result['cost'] = $this->priceCurrency->convertAndFormat((float) $result['cost'], false);
 
-        $this->getResponse()->representJson(
-            $this->_coreHelper->jsonEncode($result)
-        );
+        /** @var \Magento\Framework\Controller\Result\Json $result */
+        $result = $this->resultJsonFactory->create();
+        $result->setData($result);
+
+        return $result;
     }
 }

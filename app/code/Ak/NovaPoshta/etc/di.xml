@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Ak\NovaPoshta\Model\Log\LoggerInterface" type="Ak\NovaPoshta\Model\Log\NovaPoshta" />
+    <type name="Ak\NovaPoshta\Model\Log\NovaPoshta">
+        <arguments>
+            <argument name="name" xsi:type="string">novaposhta</argument>
+            <argument name="handlers"  xsi:type="array">
+                <item name="novaposhta" xsi:type="object">Ak\NovaPoshta\Model\Log\Handler</item>
+            </argument>
+        </arguments>
+    </type>
+</config>
